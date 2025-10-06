@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>{{ action }} {{ type|title }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% if type == 'product' %}
+                        <div class="mb-3">
+                            <label for="product_id" class="form-label">Product ID</label>
+                            <input type="text" class="form-control" id="product_id" name="product_id" 
+                                   value="{{ item.product_id if item }}" {{ 'readonly' if action == 'Edit' else 'required' }}>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="{{ item.name if item }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="3">{{ item.description if item }}</textarea>
+                        </div>
+                    
+                    {% elif type == 'location' %}
+                        <div class="mb-3">
+                            <label for="location_id" class="form-label">Location ID</label>
+                            <input type="text" class="form-control" id="location_id" name="location_id" 
+                                   value="{{ item.location_id if item }}" {{ 'readonly' if action == 'Edit' else 'required' }}>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Location Name</label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="{{ item.name if item }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3">{{ item.address if item }}</textarea>
+                        </div>
+                    
+                    {% elif type == 'movement' %}
+                        <div class="mb-3">
+                            <label for="product_id" class="form-label">Product</label>
+                            <select class="form-control" id="product_id" name="product_id" required>
+                                <option value="">Select Product</option>
+                                {% for product in products %}
+                                <option value="{{ product.product_id }}" 
+                                        {{ 'selected' if item and item.product_id == product.product_id }}>
+                                    {{ product.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="from_location" class="form-label">From Location</label>
+                                    <select class="form-control" id="from_location" name="from_location">
+                                        <option value="">Select From Location</option>
+                                        {% for location in locations %}
+                                        <option value="{{ location.location_id }}"
+                                                {{ 'selected' if item and item.from_location == location.location_id }}>
+                                            {{ location.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="to_location" class="form-label">To Location</label>
+                                    <select class="form-control" id="to_location" name="to_location">
+                                        <option value="">Select To Location</option>
+                                        {% for location in locations %}
+                                        <option value="{{ location.location_id }}"
+                                                {{ 'selected' if item and item.to_location == location.location_id }}>
+                                            {{ location.name }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="qty" class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="qty" name="qty" 
+                                   value="{{ item.qty if item }}" min="1" required>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            {{ action }} {{ type|title }}
+                        </button>
+                        <a href="{{ url_for(type + 's') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
